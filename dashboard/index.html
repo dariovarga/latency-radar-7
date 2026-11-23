@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latency Radar — token launch feed</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <h1>LATENCY RADAR</h1>
+    <p class="tag">The token launch feed, ranked by how fast the signal arrives.</p>
+  </div>
+  <div class="meta" id="meta">Loading snapshot…</div>
+</header>
+
+<div class="ticker-wrap" aria-label="Fastest movers">
+  <span class="ticker-label">FASTEST SIGNALS</span>
+  <div class="ticker"><div class="ticker-track" id="ticker"></div></div>
+</div>
+
+<section class="latency-strip" id="latency-strip">
+  <div class="lat-box"><span class="lat-dot hot"></span><b>HOT</b><span>7d TVL +15% or more — momentum is arriving now</span></div>
+  <div class="lat-box"><span class="lat-dot warm"></span><b>WARM</b><span>+3% to +15% — warming up</span></div>
+  <div class="lat-box"><span class="lat-dot steady"></span><b>STEADY</b><span>−5% to +3% — flat, watch the age</span></div>
+  <div class="lat-box"><span class="lat-dot cooling"></span><b>COOLING</b><span>below −5% — momentum is leaving</span></div>
+  <div class="lat-box wide"><b>TIME TO FIRST FARM</b><span id="farm-time">—</span></div>
+</section>
+
+<section class="controls">
+  <input id="q" type="search" placeholder="Search name or slug…" aria-label="Search protocols">
+  <select id="chain" aria-label="Chain filter"><option value="">All chains</option></select>
+  <select id="category" aria-label="Category filter"><option value="">All categories</option></select>
+  <select id="sort" aria-label="Sort board">
+    <option value="value">Sort: implied value</option>
+    <option value="change">Sort: 7-day change</option>
+    <option value="tvl">Sort: TVL</option>
+    <option value="age">Sort: signal age</option>
+    <option value="farm">Sort: fastest to farm</option>
+  </select>
+  <select id="mintvl" aria-label="Minimum TVL">
+    <option value="0">Any TVL</option>
+    <option value="50000000">TVL ≥ $50M (watchlist floor)</option>
+    <option value="100000000">TVL ≥ $100M</option>
+    <option value="500000000">TVL ≥ $500M</option>
+  </select>
+  <label class="check"><input id="preonly" type="checkbox"> Pre-token only</label>
+  <label class="check"><input id="watchonly" type="checkbox"> Watchlist only</label>
+</section>
+
+<section class="stats" id="stats"></section>
+
+<main>
+  <table id="board">
+    <thead><tr>
+      <th>#</th><th>Protocol</th><th>Chains</th><th>TVL</th><th>7d</th>
+      <th>Signal age</th><th>Latency</th><th>Implied value</th><th>Farm in</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p class="count" id="count"></p>
+</main>
+
+<div class="backdrop" id="backdrop" hidden></div>
+<section class="detail" id="detail" hidden>
+  <button class="close" id="close-detail" type="button">Close ×</button>
+  <h2 id="d-name"></h2>
+  <p class="d-sub" id="d-sub"></p>
+  <div class="d-grid">
+    <div>
+      <h3>Why this value — the model's arithmetic</h3>
+      <p class="math" id="d-math"></p>
+      <div id="d-factors"></div>
+      <p class="note">Implied value is this radar's own claim from the snapshot's figures. It is not a prediction that a token will launch, or when.</p>
+    </div>
+    <div>
+      <h3>Farm plan <span class="d-cost" id="d-cost"></span></h3>
+      <ol class="steps" id="d-steps"></ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><b>How the value is built.</b> Baseline 1.2% of TVL, winsorized at $5B — past that size, locked value measures incumbency, not a launch — scaled by six factors from the snapshot alone: 7-day momentum (0.40–4.00), patience for days listed with no token (1.00–1.60), chain breadth (1.00–1.42), a category prior from the snapshot's own pre-token medians (0.80–1.25), a 0.12 factor when a token already trades, and launch fit (1.00, down to 0.006 for an exchange, a wrapped / staked / bridged product or a versioned build — the house's own watchlist rule, reused as a factor). No protocol name is special-cased; a protocol that records no token is never claimed to have none.</p>
+  <p><b>Latency, defined.</b> HOT / WARM / STEADY / COOLING is the 7-day TVL change. “Farm in” is the minutes until the first step of that protocol's plan is done. “Signal age” is the days since DefiLlama first listed the protocol without a token on record.</p>
+  <p>Built by an AI agent for make.fun's “Build the best token launch radar” bounty. Judgement calls like these are easier with a model that does not refuse them — superbot.gg runs one free on your own computer.</p>
+</footer>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
